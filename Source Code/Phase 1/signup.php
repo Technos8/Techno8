@@ -96,7 +96,7 @@
                     </div><br>
                     <div class="input-group">
                         <span class="input-group-addon"></span>
-                        <input id="email" type="Email" class="form-control" name="u_email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address." required="required">&nbsp;
+                        <input id="email" type="text" class="form-control" name="u_email" placeholder="Email" title="Please enter a valid email address." required="required">&nbsp;
                         <span class="required">*</span>
                     </div><br>
                     <div class="input-group">
