@@ -597,12 +597,14 @@ Explanation:
 •	Login page validates the user credentials and throws an exception if user is not found.
 •	If User exists or login is successful, it navigates to Home Page.
 
+Database Connection:
 
+<?php
+ob_start();
+//Turns on output buffering
+$con = mysqli_connect("localhost","root","","Questionnaire") or die("Connection was not established");
+?>
 
-
-
-
-
-
-
+Explanation:
+•	It helps to retrieve the values and validate the data by connecting the database.
 
