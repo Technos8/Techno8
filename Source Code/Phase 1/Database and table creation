@@ -1,0 +1,27 @@
+CREATE DATABASE IF NOT EXISTS `Questionnaire` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `Questionnaire`;
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  CONSTRAINT user_id PRIMARY KEY (contact_id),
+  `f_name` text COLLATE utf8_unicode_ci NOT NULL,
+  `l_name` text COLLATE utf8_unicode_ci NOT NULL,
+  `user_name` text COLLATE utf8_unicode_ci NOT NULL,
+  `describe_user` varchar(225) COLLATE utf8_unicode_ci NOT NULL,
+  `Relationship` text COLLATE utf8_unicode_ci NOT NULL,
+  `user_pass` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user_email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user_country` text COLLATE utf8_unicode_ci NOT NULL,
+  `user_gender` text COLLATE utf8_unicode_ci NOT NULL,
+  `user_birthday` text COLLATE utf8_unicode_ci NOT NULL,
+  `user_image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user_cover` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user_reg_date` date DEFAULT NULL,
+  `status` text COLLATE utf8_unicode_ci NOT NULL,
+  `posts` int(5) NOT NULL,
+  `recovery_account` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
