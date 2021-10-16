@@ -1,0 +1,8 @@
+<?php
+
+ob_start();
+//Turns on output buffering
+
+$con = mysqli_connect("localhost","root","","Questionnaire") or die("Connection was not established");
+
+?>
