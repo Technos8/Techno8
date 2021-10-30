@@ -608,3 +608,2849 @@ $con = mysqli_connect("localhost","root","","Questionnaire") or die("Connection 
 Explanation:
 •	It helps to retrieve the values and validate the data by connecting the database.
 
+
+change_password:
+
+<!DOCTYPE html>
+<?php
+ini_set('session.gc_maxlifetime', 36000);
+session_start();
+include("includes/connection.php");
+include("functions/functions.php");
+?>
+<?php 
+if(isset($_SESSION['root']) && isset($_SESSION[''])){
+if(!isset($_SESSION['user_email'])){
+	
+	header("location: index.php");
+}
+}else{ 
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Change Password</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+	<script src="jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/ionicons.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+    
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+		
+</head>
+
+<style>
+	.main-content {
+    width: 50%;
+    height: 40%;
+    margin: 10px auto;
+    background-color: #fff;
+    padding: 40px 50px;
+  }
+  .header {
+    border: 0px solid #000;
+    margin-bottom: 5px;
+  }
+  .well{
+    background-color: #0c9c0d;
+  }
+  #signup{
+    width: 60%;
+    border-radius: 30px;
+  }
+</style>
+<body>
+	<div>
+		<?php 
+		$user = $_SESSION['user_email'];
+		$get_user = "select * from users where user_email='$user'"; 
+		$run_user = mysqli_query($con,$get_user);
+		$row=mysqli_fetch_array($run_user);
+					
+		$user_id = $row['user_id'];
+		$user_name = $row['user_name'];
+		?>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="well">
+				<center><h1 style="color: white;"><strong>Questionnaire</strong></h1></center>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="main-content">
+		        <div class="header">
+				<h3 style="text-align: center;"><strong>Change Your Password </strong></h3>
+				<strong style="color:#187FAB; "><i><?php echo $user_name; ?></i></strong>
+				<hr>
+		        </div>
+		        <div class="l-part">
+		          <form  action="" method="post">
+		          	<div class="input-group">
+					    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+					    <input id="password" type="password" class="form-control" name="pass" placeholder="New Password" required="required">
+					</div><br>
+					<div class="input-group">
+					    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+					    <input id="password" type="password" class="form-control" name="pass1" placeholder="Re-enter Password" required="required">
+					</div><br>
+		            <center><button id="signup" class="btn btn-info btn-lg" name="change">Change Password</button></center>
+		          </form>
+		        </div>
+	      </div>
+		</div>
+	</div>
+</body>
+</html>
+  	<?php
+        if(isset($_POST['change'])){
+			$pass = htmlentities(mysqli_real_escape_string($con,$_POST['pass']));
+			$pass1 = htmlentities(mysqli_real_escape_string($con,$_POST['pass1']));
+
+				if ($pass == $pass1) {
+					if (strlen($pass) >= 6 && strlen($pass) <= 60) {
+						$update = "update users set user_pass='$pass' where user_id='$user_id'";
+		
+						$run = mysqli_query($con,$update);
+							echo "<script>alert('Your Password is changed a moment ago')</script>";
+							echo "<script>window.open('home.php','_self')</script>";
+							
+					}else{
+						echo "<script>alert('Your Password should be greater than 6 words')</script>";
+						}
+					}else{
+						echo "<script>alert('Your Passwords did not match')</script>";
+						echo "<script>window.open('change_password.php','_self')</script>";
+					}
+		}
+    ?>
+
+<?php } ?>
+
+Explanation : Used to change old password of the user by confirming the opld password
+
+
+forgot_password:
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Forgotten Password</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#303030" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/ionicons.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+    
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<style>
+  body{
+    overflow-x: hidden;
+  }
+  .main-content {
+    width: 80%;
+    height: 40%;
+    margin: 10px auto;
+    background-color: #fff;
+    
+    padding: 40px 50px;
+  }
+	.header {
+  background-color: #0c9c0d;
+  padding: 23px;
+  text-align: center;
+   border-radius: 4px;
+}
+
+  #signup{
+    width: 60%;
+    border-radius: 30px;
+  }
+  	.Questionnairevlogo{
+    
+    font-size:23px;
+    color: white;
+    font-family: monospace;
+        letter-spacing:2px;
+        font-weight:bolder;
+        
+}
+</style>
+<body>
+		<div class="header">
+			
+				<center><h1 class="Questionnairelogo">QUESTIONNAIRE</h1></center>
+		
+		</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="main-content">
+		        
+		          <h3 style="text-align: center;"><strong>Forgot Password.</strong></h3><hr>
+		        
+		        <div class="l-part">
+		          <form  action="" method="post">
+		          	<div class="input-group">
+								    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								    <input id="email" type="text" class="form-control" name="email" placeholder="Enter Email" required="required">
+								</div><br>
+								<hr>
+								<pre class="text">Enter your BestFriend name down below</pre>
+		          	 <div class="input-group">
+								    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+								    <input id="msg" type="text" class="form-control" placeholder="Someone" name="recovery_account" required="required">
+								</div><br>
+					<a style="text-decoration:none;float: right; color:#187FAB;" data-toggle="tooltip" title="Signin"  href="signin.php">Back to Signin?</a><br><br>
+		            <center><button id="signup" class="btn btn-info btn-lg" name="submit">Submit</button></center>
+		          </form>
+		        </div>
+	      </div>
+		</div>
+	</div>
+</body>
+</html>
+<?php
+session_start();
+
+include("includes/connection.php");
+
+
+
+	if(isset($_POST['submit'])){
+
+	$email = htmlentities(mysqli_real_escape_string($con,$_POST['email']));
+	$recovery_account = htmlentities(mysqli_real_escape_string($con,$_POST['recovery_account']));
+
+	$select_user = "select * from users where user_email='$email' AND recovery_account='$recovery_account'";
+
+	$query = mysqli_query($con,$select_user);
+
+	$check_user = mysqli_num_rows($query);
+
+	if($check_user==1){
+
+	$_SESSION['user_email']=$email;
+
+	echo "<script>window.open('change_password.php','_self')</script>";
+
+	}
+	else {
+	echo "<script>alert('Your Email or your Bestfriend name is Incorrect')</script>";
+	echo "<script>window.open('forgot_password.php','_self')</script>";
+	}
+
+	}
+
+
+?>
+
+Explanation : This page used to get the user password back
+
+home page :
+
+<?php
+session_start();
+include("includes/header.php");
+?>
+<?php
+    if(isset($_SESSION['root'])){
+        if(!isset($_SESSION['user_email'])){
+        }
+    }
+    else{ ?>
+<!doctype html>
+    <html>
+        <head>
+            <meta charset="utf-8">
+	<meta name="google-site-verification" content="lULEKL17sg-sjIrr_qC7ULbWmW9nggAZgJrykNQa5Qo" />
+	<meta name="google-site-verification" content="4DpYzvF7PiYldR_bvsCRMtWyVF3_e1yWz4z2ETKMiOI" />
+<title> Questionnaire - Home  Ask Questions, Questionnaire Answers you.</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-178254635-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-178254635-1');
+</script>
+  <meta name="google-site-verification" content="1G-SujUrJ_k3b0uA_4QWRd-7t-QvGADXolPyd0SH_1U" />
+    <meta name="googlebot" content="index">
+<meta name="robots" content="index" />
+<meta name="googlebot" content="index, follow">
+ <meta name="googlebot-news" content="nosnippet">
+	<meta name="theme-color" content="#303030" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="1G-SujUrJ_k3b0uA_4QWRd-7t-QvGADXolPyd0SH_1U" />
+    <meta name="google-site-verification" content="1G-SujUrJ_k3b0uA_4QWRd-7t-QvGADXolPyd0SH_1U" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/home_style2.css" media="all"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Candara">
+
+
+
+    <link rel="stylesheet" href="css/style.css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/css/emoji.css" rel="stylesheet">
+
+
+
+<style>
+    .img{
+
+
+    border: 1px solid #ffffff;
+
+    }
+
+</style >
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+$(document).ready(function(){
+    var maxLength =460;
+    $(".show-read-more").each(function(){
+        var myStr = $(this).text();
+        if($.trim(myStr).length > maxLength){
+            var newStr = myStr.substring(0, maxLength);
+            var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+            $(this).empty().html(newStr);
+            $(this).append(' <a href="javascript:void(0);" class="read-more">more...</a>');
+            $(this).append('<span class="more-text">' + removedStr + '</span>');
+        }
+    });
+    $(".read-more").click(function(){
+
+
+
+               $(this).siblings(".more-text").contents().unwrap();
+        $(this).remove();
+
+
+
+
+    });
+});
+</script>
+
+<style>
+    .show-read-more .more-text{
+        display: none;
+    }
+</style>
+
+
+
+
+
+</head>
+<body>
+<div class="row">
+	<div id="insert_post" class="col-sm-12">
+		<center>
+	  	<form action="home.php?id=<?php echo $user_id;?>" method="post" id="f" enctype='multipart/form-data'>
+		<textarea class="form-control" id="content" rows="4" name="content" placeholder="Post your question ?  / blogs etc.."></textarea><br/>
+		<label class="btn btn-warning" id="upload_image_button">select-image <i class="glyphicon glyphicon-picture"></i>
+		<input type="file"name='upload_image' size="30" value="" id="filePhoto" >
+		</br>
+		</br>
+		<div>
+		    	<img id="previewHolder" alt="" BORDER="0" width="65px" height="45px"/>
+		</div>
+
+		</label>
+		<button id="btn-post" class="btn btn-success" name="sub">Post</button>
+				
+
+		
+		</form>
+		<br><br>
+		
+        <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <div class="fb-video"
+    data-href="https://www.facebook.com/watch/?v=304948337598870"
+    data-width="500"
+    data-allowfullscreen="true"></div>
+</center>
+</div>
+	
+
+		<?php insertPost();?>
+	
+		</center>
+	</div>
+</div>
+
+<div class="row">
+    
+	<div class="col-sm-12">
+	    
+		<center><h2><strong></strong></h2><br></center>
+		
+
+			
+		<?php get_posts();?>
+	</div>
+</div>
+</body>
+
+<?php } ?>
+
+
+<script>
+    function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      $('#previewHolder').attr('src', e.target.result);
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+$("#filePhoto").change(function() {
+  readURL(this);
+});
+</script>
+
+</html>
+
+Explanation : this page contains all the posts posted in the site along with all the navigations ie., myprofile, posts, comments
+
+
+Logout page:
+
+
+
+
+
+<?php
+
+
+session_start();
+session_destroy();
+	    setcookie('emailcookie','' , time() - 3600 * 24 * 30);
+	     setcookie('passcookie','', time() - 3600 * 24 * 30);
+	     header("Location:signin.php");
+
+?>
+
+Explanation : This button is used to logout the user by terminating the usersession
+
+Profile page :
+
+
+
+<!DOCTYPE html>
+<link rel="icon" href="images/retort-icon.png.png" >
+<?php
+
+include("includes/header.php");
+include('includes/connection.php');
+?>
+
+<html amp lang="en">
+<head>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-178254635-1');
+</script>
+
+    <meta charset="utf-8">
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <title><?php echo"$user_name"; ?></title>
+    <link rel="canonical" href="https://amp.dev/documentation/guides-and-tutorials/start/create/basic_markup/">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Open-source framework for publishing content",
+        "datePublished": "2015-10-07T12:02:41Z",
+        "image": [
+          "logo.jpg"
+        ]
+      }
+    </script>
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+
+    	
+		<meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta name="theme-color" content="#303030" />
+	    <meta name="google-site-verification" content="1G-SujUrJ_k3b0uA_4QWRd-7t-QvGADXolPyd0SH_1U" />
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	    <link rel="stylesheet" href="styles/home_style2.css" media="all"/>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/ionicons.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+    
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+     <link rel="icon" href="images/icons8-circled-r-24.png">
+</head>
+<style>
+#cover-img{
+	height:400px;
+   	width:100%;
+}
+#profile_img{
+	position: absolute;
+	top: 160px;
+	left: 40px;
+}
+#update_profile{
+  	position: absolute;
+  	top: 150px;
+  	cursor: pointer;
+  	left: 93px;
+  	border-radius: 4px;
+  	background-color: rgba(0,0,0,0.1);
+  	transform: translate(-50%, -50%);
+}
+#button_profile{
+  	position: absolute;
+  	top: 115%;
+  	left: 50%;
+  	cursor: pointer;
+  	transform: translate(-50%, -50%);
+}
+#own_posts{
+    border: 1px solid #fffff;
+    padding: 28px 18px;
+	word-wrap: break-word;
+
+}
+#posts_img {
+    height:300px;
+   	width:100%;
+}
+
+
+</style>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+$(document).ready(function(){
+    var maxLength = 300;
+    $(".show-read-more").each(function(){
+        var myStr = $(this).text();
+        if($.trim(myStr).length > maxLength){
+            var newStr = myStr.substring(0, maxLength);
+            var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+            $(this).empty().html(newStr);
+            $(this).append(' <a href="javascript:void(0);" class="read-more">more...</a>');
+            $(this).append('<span class="more-text">' + removedStr + '</span>');
+        }
+    });
+    $(".read-more").click(function(){
+        $(this).siblings(".more-text").contents().unwrap();
+        $(this).remove();
+    });
+});
+</script>
+<style>
+    .show-read-more .more-text{
+        display: none;
+    }
+</style>
+    
+<body>
+    <div class="row">
+        <div class="col-sm-2">
+	</div>
+	<div class="col-sm-8">
+	    <?php
+if(isset($_SESSION['root']) && isset($_SESSION[''])){
+if(!isset($_SESSION['user_email'])){
+
+	header("location: index.php");
+	
+
+}
+    
+}
+
+else{ ?>
+	<?php 
+	
+		$user = $_SESSION['user_email'];
+		$get_user = "select * from users where user_email='$user'"; 
+		$run_user = mysqli_query($con,$get_user);
+		$row=mysqli_fetch_array($run_user);
+					
+		$user_id = $row['user_id']; 
+		$user_name = $row['user_name'];
+		?>
+
+
+
+	   
+          <?php
+          
+         
+          echo "
+         	<div>
+				<div><img id='cover-img' class='img-rounded' src='cover/$user_cover' alt='cover'/></div>
+				<form action='profile.php? u_id=$user_id' method='post' enctype='multipart/form-data'>
+					<ul class='nav pull-left' style='position: absolute;top: 10px;left: 40px;'>
+				    	<li class='dropdown'>
+				        	<button class='dropdown-toggle btn btn-default' data-toggle='dropdown'>Change Cover</button> 
+				        	<div class='dropdown-menu'>
+				        		<center>
+				        		<p> Click <strong>Select Cover</strong> and then click the <br> <strong>Update Cover</strong></p>
+				            	<label class='btn btn-info'> Select Cover
+						        <input type='file' name='u_cover' size='60' />
+						        </label><br><br>
+				                <button name='submit' class='btn btn-info'>Update cover</button>
+				            	</center>
+				            </div>
+				        </li>
+				    </ul>
+	          	</form>
+			</div>
+         	<div id='profile_img'>
+	            <img src='users/$user_image' alt='Profile' class='img-circle' width='180px' height='185px' />
+	            <form action='profile.php?u_id=$user_id' method='post' enctype='multipart/form-data'>
+	            <label id='update_profile'> Select Profile
+	            <input type='file' name='u_image' size='60' />
+	            </label>
+	            <button id='button_profile' name='update' class='btn btn-info'>Update Profile</button>
+	            </form>
+          	</div><br>
+          "; ?>
+
+           <?php 
+
+            if(isset($_POST['submit']))
+            {
+            
+
+              $u_cover = $_FILES['u_cover']['name'];
+              $image_tmp = $_FILES['u_cover']['tmp_name'];
+              $random_number = rand(1,100);
+
+              if($u_cover==''){
+                echo "<script>alert('Please Select Cover Image!')</script>";
+                echo "<script>window.open('profile.php?u_id=$user_id','_self')</script>";
+                exit();
+              }else{
+              
+              move_uploaded_file($image_tmp,"cover/$u_cover.$random_number");
+              
+              $update = "update users set user_cover='$u_cover.$random_number' where user_id='$user_id'";
+              
+              $run = mysqli_query($con,$update); 
+              
+              if($run){
+              
+              echo "<script>alert('Your Cover Updated!')</script>";
+              echo "<script>window.open('profile.php?u_id=$user_id','_self')</script>";
+              }
+            }
+            
+            }
+
+
+          ?>
+          </div>
+          <?php 
+
+            if(isset($_POST['update'])){
+
+              $u_image = $_FILES['u_image']['name'];
+              $image_tmp = $_FILES['u_image']['tmp_name'];
+              $random_number = rand(1,100);
+
+              if($u_image==''){
+                echo "<script>alert('Please Select Profile Image on clicking on the profile image area!')</script>";
+                echo "<script>window.open('profile.php?u_id=$user_id','_self')</script>";
+                exit();
+              }else{
+              
+              move_uploaded_file($image_tmp,"users/$u_image.$random_number");
+
+              
+              $update = "update users set user_image='$u_image.$random_number' where user_id='$user_id'";
+              
+              $run = mysqli_query($con,$update); 
+              
+              if($run){
+              
+              echo "<script>alert('Your Profile Updated!')</script>";
+              echo "<script>window.open('profile.php?u_id=$user_id','_self')</script>";
+              }
+            }
+            
+            }
+
+
+          ?>
+    <div class="col-sm-2">
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-2">
+	    
+	</div>
+	<div class="col-sm-2" style="background-color: #e6e6e6; text-align: center; left:0.8%; border-radius: 5px;">
+		<?php
+		echo"
+		<center><h2><strong>About</strong></h2></center><br>
+		<center><h4><strong>$first_name $last_name</strong></h4></center>
+        <p><strong><i style='color:grey;'> $describe_user</i></strong></p><br>
+        <p><strong>Relationship Status: </strong> $Relationship_status</p><br>
+        <p><strong>Lives In: </strong> $user_country</p><br>
+        <p><strong>Member Since: </strong> $register_date</p><br>
+        <p><strong>Gender: </strong>  $user_gender</p><br>
+        <p><strong>Date Of Birth: </strong>  $user_birthday</p><br>
+        ";					$user = $_SESSION['user_email'];
+					$get_user = "select * from users where user_email='$user'";
+					$run_user = mysqli_query($con,$get_user);
+					$row=mysqli_fetch_array($run_user);
+
+					$userown_id = $row['user_id'];
+					$user_name = $row['user_name'];
+					$user_image = $row['user_image'];
+
+					if($user_id == $userown_id){
+						echo"<a href='edit_profile.php?u_id=$userown_id' class='btn btn-success'/>Edit Profile</a><br><br><br>";
+					}
+  
+        ?>
+	</div>
+	<div class="col-sm-6">
+		<!--Displaying Users own Posts-->
+
+		<?php
+			global $con;
+	
+			if(isset($_GET['u_id'])){
+			$u_id = $_GET['u_id'];
+			}
+			$get_posts = "select * from posts where user_id='$u_id' ORDER by 1 DESC LIMIT 5";
+			
+			$run_posts = mysqli_query($con,$get_posts);
+			
+			while($row_posts=mysqli_fetch_array($run_posts)){
+		
+			$post_id = $row_posts['post_id'];
+			$user_id = $row_posts['user_id'];
+			$content = $row_posts['post_content'];
+			$upload_image = $row_posts['upload_image'];
+			$post_date = $row_posts['post_date'];
+			
+			//getting the user who has posted the thread
+			
+			$user = "select * from users where user_id='$user_id' AND posts='yes'"; 
+			
+			$run_user = mysqli_query($con,$user); 
+			$row_user=mysqli_fetch_array($run_user);
+			
+			$user_name = $row_user['user_name'];
+			$user_image = $row_user['user_image'];
+			
+			//now displaying all at once 
+
+			if($content=="No" && strlen($upload_image) >= 1){
+			echo "
+			<div id='own_posts'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+						
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div><br>
+				<div class='col-sm-2'>
+					<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+					</div>
+					<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-success'>View</button></a>
+					<a href='edit_post.php?post_id=$post_id' style='float:right;'><button  class='btn btn-info'>Edit</button></a>
+					<a href='functions/delete_post.php?post_id=$post_id' style='float:right;'><button class='btn btn-danger'>Delete</button></a>
+			</div><br/><br/>
+			";
+
+
+			}
+			else if(strlen($content) >= 1 && strlen($upload_image) >= 1){
+			echo "
+			<div id='own_posts'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+						
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<p class='show-read-more'>$content</p>
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div><br>
+					<div class='col-sm-2'>
+					<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+					</div>
+					<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-success'>View</button></a>
+					<a href='edit_post.php?post_id=$post_id' style='float:right;'><button  class='btn btn-info'>Edit</button></a>
+					<a href='functions/delete_post.php?post_id=$post_id' style='float:right;'><button class='btn btn-danger'>Delete</button></a>
+			</div><br/><br/>
+			";
+
+
+			}
+			else{
+
+			echo "
+			
+			<div id='own_posts'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+						
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-2'>
+					</div>
+					<div class='col-sm-6'>
+						<h3><p class='show-read-more'>$content</p></h3>
+					</div>
+					<div class='col-sm-4'>
+						
+					</div>
+				</div>
+			";
+			
+			global $con;
+	
+			if(isset($_GET['u_id'])){
+			$u_id = $_GET['u_id'];
+			
+			}
+			$get_posts = "select user_email from users where user_id='$u_id'";
+			$run_user = mysqli_query($con,$get_posts);
+			$row=mysqli_fetch_array($run_user);
+
+			$user_email = $row['user_email'];
+
+			$user = $_SESSION['user_email'];
+			$get_user = "select * from users where user_email='$user'"; 
+			$run_user = mysqli_query($con,$get_user);
+			$row=mysqli_fetch_array($run_user);
+					
+			$user_id = $row['user_id'];
+			$u_email = $row['user_email'];
+
+			if($u_email != $user_email){
+				echo"<script>window.open('profile.php?u_id=$user_id','_self')</script>";
+			}else{
+
+			echo"           <div class='col-sm-2'>
+					<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+					</div>
+					<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-success'>View</button></a>
+					<a href='edit_post.php?post_id=$post_id' style='float:right;'><button  class='btn btn-info'>Edit</button></a>
+					<a href='functions/delete_post.php?post_id=$post_id' style='float:right;'><button class='btn btn-danger'>Delete</button></a>
+			</div><br/><br/><br/>
+			";
+			}
+		}
+			include("functions/delete_post.php");
+			
+		}
+	
+
+		?>
+
+
+	</div>
+	<div class="col-sm--2">
+		
+	</div>
+</div>	
+</body>
+</html>
+<?php } ?>
+<?
+if ($_SESSION["user_email"] == "" && $_SESSION["user_email"] == null)
+	echo "<script>window.open('signin.php','_self')</script>";
+	
+	
+?>
+
+Explanation : This page contains all the information of the user
+
+
+Results page :
+
+<!DOCTYPE html>
+<?php
+session_start();
+include("includes/header.php");
+?>
+<?php
+if(isset($_SESSION['root']) && isset($_SESSION['S'])){
+if(!isset($_SESSION['user_email'])){
+
+	header("location: index.php");
+}
+}
+else{ ?>
+<html amp lang="en">
+<head>	
+
+    <meta charset="utf-8">
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <title> Results - questionnaire.com</title>
+    <link rel="canonical" href="https://amp.dev/documentation/guides-and-tutorials/start/create/basic_markup/">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "Open-source framework for publishing content",
+        "datePublished": "2015-10-07T12:02:41Z",
+        "image": [
+          "logo.jpg"
+        ]
+      }
+    </script>
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="styles/home_style2.css" media="all"/>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/ionicons.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+    
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+		
+</head>
+<body>
+<div class="row">
+	<div class="col-sm-12">
+		<center><h2>See Your reslts here!</h2></center><br><br>
+		<?php results();?>
+	</div>
+</div>
+</body>
+</html>
+<?php } ?>
+</style >
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+$(document).ready(function(){
+    var maxLength = 250;
+    $(".show-read-more").each(function(){
+        var myStr = $(this).text();
+        if($.trim(myStr).length > maxLength){
+            var newStr = myStr.substring(0, maxLength);
+            var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+            $(this).empty().html(newStr);
+            $(this).append(' <a href="javascript:void(0);" class="read-more">more...</a>');
+            $(this).append('<span class="more-text">' + removedStr + '</span>');
+        }
+    });
+    $(".read-more").click(function(){
+        $(this).siblings(".more-text").contents().unwrap();
+        $(this).remove();
+    });
+});
+</script>
+
+<style>
+    .show-read-more .more-text{
+        display: none;
+    }
+</style>
+
+Explanation : this page has all the results
+
+Single page :
+
+
+
+<?php
+
+session_start();
+include("includes/header.php");
+?>
+<?php 
+if(isset($_SESSION['root']) && isset($_SESSION[''])){
+if(!isset($_SESSION['user_email'])){
+	
+	header("location: index.php");
+}
+}
+else{ ?>
+<html>
+<head>
+    
+
+
+
+<h1></h1>
+    <meta http-equiv='content-language' content='en-gb'>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="1G-SujUrJ_k3b0uA_4QWRd-7t-QvGADXolPyd0SH_1U" />
+  <meta name="robots" content="index,follow"/>
+  <meta name="googlebot" content="index">
+
+ <meta name="googlebot-news" content="nosnippet"> 
+	   
+
+
+	<meta name="theme-color" content="#303030" /> 
+
+   
+    <meta name="google-site-verification" content="1G-SujUrJ_k3b0uA_4QWRd-7t-QvGADXolPyd0SH_1U" />
+     
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="styles/home_style2.css" media="all"/>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <meta name="google-site-verification" content="1G-SujUrJ_k3b0uA_4QWRd-7t-QvGADXolPyd0SH_1U" />
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-178254635-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-178254635-1');
+</script>
+<script>
+$(document).ready(function(){
+    var maxLength = 500;
+    $(".show-read-more").each(function(){
+        var myStr = $(this).text();
+        if($.trim(myStr).length > maxLength){
+            var newStr = myStr.substring(0, maxLength);
+            var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+            $(this).empty().html(newStr);
+            $(this).append(' <a href="javascript:void(0);" class="read-more">more...</a>');
+            $(this).append('<span class="more-text">' + removedStr + '</span>');
+        }
+    });
+    $(".read-more").click(function(){
+        $(this).siblings(".more-text").contents().unwrap();
+        $(this).remove();
+    });
+});
+</script>
+<style>
+    .show-read-more .more-text{
+        display: none;
+    }
+</style>
+
+    
+</head>
+
+<body >
+<div class="row">
+	<div class="col-sm-12">
+		
+		<?php single_post();?>
+	
+	</div>
+</div>
+</body>
+</html>
+<?php } ?>
+ 
+ Exxplanation : This page shows single posts while selected them
+ 
+ 
+ Upload :
+ <?
+if ($_SESSION["user_email"] == "" && $_SESSION["user_email"] == null)
+	echo "<script>window.open('signin.php','_self')</script>";
+	
+	
+?>
+
+Explanation : this code allows user to upload image
+
+username :
+   <link rel="icon" href="images/retort-icon.png.png" >
+<?php
+ini_set('session.gc_maxlifetime', 36000);
+session_start();
+include("includes/header.php");
+?>
+<?php 
+if(isset($_SESSION['root']) && isset($_SESSION[''])){
+if(!isset($_SESSION['user_email'])){
+	
+	header("location: index.php");
+
+}
+}
+else{ ?>
+<html>
+<head>
+    
+	<title>Questionnaire</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="styles/home_style2.css" media="all"/>
+</head>
+<style>
+
+</style>
+<body>
+<div class="row">
+	<div class="col-sm-2">
+	</div>
+	<div class="col-sm-8">
+		<form action="" method="post" enctype="multipart/form-data">
+					<table class="table table-bordered table-hover">
+						<tr align="center">
+							<td colspan="6" class="active"><h2>Edit Your Profile</h2></td>
+						</tr>
+						<tr>
+							<td style="font-weight: bold;">Change Your Firstname</td>
+							<td>
+							<input class="form-control" type="text" name="f_name" required="required" value="<?php echo $first_name;?>"/>
+							</td>
+						</tr>
+						<tr>
+							<td style="font-weight: bold;">Change Your Lastname</td>
+							<td>
+							<input class="form-control" type="text" name="l_name" required="required" value="<?php echo $last_name;?>"/>
+							</td>
+						</tr>
+						<tr>
+							<td style="font-weight: bold;">Change Your Username</td>
+							<td>
+							<a href="url"> &nbsp;&nbsp;click link</a>
+							</td>
+						</tr>
+
+						<tr>
+							<td style="font-weight: bold;">Description</td>
+							<td>
+							<input class="form-control" type="text" name="describe_user" required="required" value="<?php echo $describe_user;?>"/>
+							</td>
+						</tr>
+
+						<tr>
+							<td style="font-weight: bold;">Relationship Status</td>
+							<td>
+							<select class="form-control" name="Relationship">
+								<option><?php echo $Relationship_status;?></option>
+								<option>Engaged</option>
+								<option>Married</option>
+								<option>Single</option>
+								<option>In an Replationship</option>
+								
+								<option>Separated</option>
+								<option>Divorced</option>
+								<option>Widowed</option>
+							</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td style="font-weight: bold;">Password</td>
+							<td>
+							<input class="form-control" type="password" name="u_pass" id="mypass" required="required" value="<?php echo $user_pass;?>"/><!-- onfocus="this.value=''" -->
+							<input type="checkbox" onclick="show_password()"> <strong>Show Password</strong>
+							</td>
+						</tr>
+    		<td style="font-weight: bold;">Email</td>
+							<td>
+							<input class="form-control" type="email" name="u_email" disabled required="required" value="<?php echo $user_email;?>"></td>
+						</tr>
+						
+						<tr>
+							<td style="font-weight: bold;">Country</td>
+							<td>
+							<select class="form-control" name="u_country">
+								<option><?php echo $user_country;?></option>
+								
+<option value="IN">India</option>
+        <option value="AF">Afghanistan</option>
+	<option value="AX">Åland Islands</option>
+	<option value="AL">Albania</option>
+	<option value="DZ">Algeria</option>
+	<option value="AS">American Samoa</option>
+	<option value="AD">Andorra</option>
+	<option value="AO">Angola</option>
+	<option value="AI">Anguilla</option>
+	<option value="AQ">Antarctica</option>
+	<option value="AG">Antigua and Barbuda</option>
+	<option value="AR">Argentina</option>
+	<option value="AM">Armenia</option>
+	<option value="AW">Aruba</option>
+	<option value="AU">Australia</option>
+	<option value="AT">Austria</option>
+	<option value="AZ">Azerbaijan</option>
+	<option value="BS">Bahamas</option>
+	<option value="BH">Bahrain</option>
+	<option value="BD">Bangladesh</option>
+	<option value="BB">Barbados</option>
+	<option value="BY">Belarus</option>
+	<option value="BE">Belgium</option>
+	<option value="BZ">Belize</option>
+	<option value="BJ">Benin</option>
+	<option value="BM">Bermuda</option>
+	<option value="BT">Bhutan</option>
+	<option value="BO">Bolivia, Plurinational State of</option>
+	<option value="BQ">Bonaire, Sint Eustatius and Saba</option>
+	<option value="BA">Bosnia and Herzegovina</option>
+	<option value="BW">Botswana</option>
+	<option value="BV">Bouvet Island</option>
+	<option value="BR">Brazil</option>
+	<option value="IO">British Indian Ocean Territory</option>
+	<option value="BN">Brunei Darussalam</option>
+	<option value="BG">Bulgaria</option>
+	<option value="BF">Burkina Faso</option>
+	<option value="BI">Burundi</option>
+	<option value="KH">Cambodia</option>
+	<option value="CM">Cameroon</option>
+	<option value="CA">Canada</option>
+	<option value="CV">Cape Verde</option>
+	<option value="KY">Cayman Islands</option>
+	<option value="CF">Central African Republic</option>
+	<option value="TD">Chad</option>
+	<option value="CL">Chile</option>
+	<option value="CN">China</option>
+	<option value="CX">Christmas Island</option>
+	<option value="CC">Cocos (Keeling) Islands</option>
+	<option value="CO">Colombia</option>
+	<option value="KM">Comoros</option>
+	<option value="CG">Congo</option>
+	<option value="CD">Congo, the Democratic Republic of the</option>
+	<option value="CK">Cook Islands</option>
+	<option value="CR">Costa Rica</option>
+	<option value="CI">Côte d'Ivoire</option>
+	<option value="HR">Croatia</option>
+	<option value="CU">Cuba</option>
+	<option value="CW">Curaçao</option>
+	<option value="CY">Cyprus</option>
+	<option value="CZ">Czech Republic</option>
+	<option value="DK">Denmark</option>
+	<option value="DJ">Djibouti</option>
+	<option value="DM">Dominica</option>
+	<option value="DO">Dominican Republic</option>
+	<option value="EC">Ecuador</option>
+	<option value="EG">Egypt</option>
+	<option value="SV">El Salvador</option>
+	<option value="GQ">Equatorial Guinea</option>
+	<option value="ER">Eritrea</option>
+	<option value="EE">Estonia</option>
+	<option value="ET">Ethiopia</option>
+	<option value="FK">Falkland Islands (Malvinas)</option>
+	<option value="FO">Faroe Islands</option>
+	<option value="FJ">Fiji</option>
+	<option value="FI">Finland</option>
+	<option value="FR">France</option>
+	<option value="GF">French Guiana</option>
+	<option value="PF">French Polynesia</option>
+	<option value="TF">French Southern Territories</option>
+	<option value="GA">Gabon</option>
+	<option value="GM">Gambia</option>
+	<option value="GE">Georgia</option>
+	<option value="DE">Germany</option>
+	<option value="GH">Ghana</option>
+	<option value="GI">Gibraltar</option>
+	<option value="GR">Greece</option>
+	<option value="GL">Greenland</option>
+	<option value="GD">Grenada</option>
+	<option value="GP">Guadeloupe</option>
+	<option value="GU">Guam</option>
+	<option value="GT">Guatemala</option>
+	<option value="GG">Guernsey</option>
+	<option value="GN">Guinea</option>
+	<option value="GW">Guinea-Bissau</option>
+	<option value="GY">Guyana</option>
+	<option value="HT">Haiti</option>
+	<option value="HM">Heard Island and McDonald Islands</option>
+	<option value="VA">Holy See (Vatican City State)</option>
+	<option value="HN">Honduras</option>
+	<option value="HK">Hong Kong</option>
+	<option value="HU">Hungary</option>
+	<option value="IS">Iceland</option>
+	
+	<option value="ID">Indonesia</option>
+	<option value="IR">Iran, Islamic Republic of</option>
+	<option value="IQ">Iraq</option>
+	<option value="IE">Ireland</option>
+	<option value="IM">Isle of Man</option>
+	<option value="IL">Israel</option>
+	<option value="IT">Italy</option>
+	<option value="JM">Jamaica</option>
+	<option value="JP">Japan</option>
+	<option value="JE">Jersey</option>
+	<option value="JO">Jordan</option>
+	<option value="KZ">Kazakhstan</option>
+	<option value="KE">Kenya</option>
+	<option value="KI">Kiribati</option>
+	<option value="KP">Korea, Democratic People's Republic of</option>
+	<option value="KR">Korea, Republic of</option>
+	<option value="KW">Kuwait</option>
+	<option value="KG">Kyrgyzstan</option>
+	<option value="LA">Lao People's Democratic Republic</option>
+	<option value="LV">Latvia</option>
+	<option value="LB">Lebanon</option>
+	<option value="LS">Lesotho</option>
+	<option value="LR">Liberia</option>
+	<option value="LY">Libya</option>
+	<option value="LI">Liechtenstein</option>
+	<option value="LT">Lithuania</option>
+	<option value="LU">Luxembourg</option>
+	<option value="MO">Macao</option>
+	<option value="MK">Macedonia, the former Yugoslav Republic of</option>
+	<option value="MG">Madagascar</option>
+	<option value="MW">Malawi</option>
+	<option value="MY">Malaysia</option>
+	<option value="MV">Maldives</option>
+	<option value="ML">Mali</option>
+	<option value="MT">Malta</option>
+	<option value="MH">Marshall Islands</option>
+	<option value="MQ">Martinique</option>
+	<option value="MR">Mauritania</option>
+	<option value="MU">Mauritius</option>
+	<option value="YT">Mayotte</option>
+	<option value="MX">Mexico</option>
+	<option value="FM">Micronesia, Federated States of</option>
+	<option value="MD">Moldova, Republic of</option>
+	<option value="MC">Monaco</option>
+	<option value="MN">Mongolia</option>
+	<option value="ME">Montenegro</option>
+	<option value="MS">Montserrat</option>
+	<option value="MA">Morocco</option>
+	<option value="MZ">Mozambique</option>
+	<option value="MM">Myanmar</option>
+	<option value="NA">Namibia</option>
+	<option value="NR">Nauru</option>
+	<option value="NP">Nepal</option>
+	<option value="NL">Netherlands</option>
+	<option value="NC">New Caledonia</option>
+	<option value="NZ">New Zealand</option>
+	<option value="NI">Nicaragua</option>
+	<option value="NE">Niger</option>
+	<option value="NG">Nigeria</option>
+	<option value="NU">Niue</option>
+	<option value="NF">Norfolk Island</option>
+	<option value="MP">Northern Mariana Islands</option>
+	<option value="NO">Norway</option>
+	<option value="OM">Oman</option>
+	<option value="PK">Pakistan</option>
+	<option value="PW">Palau</option>
+	<option value="PS">Palestinian Territory, Occupied</option>
+	<option value="PA">Panama</option>
+	<option value="PG">Papua New Guinea</option>
+	<option value="PY">Paraguay</option>
+	<option value="PE">Peru</option>
+	<option value="PH">Philippines</option>
+	<option value="PN">Pitcairn</option>
+	<option value="PL">Poland</option>
+	<option value="PT">Portugal</option>
+	<option value="PR">Puerto Rico</option>
+	<option value="QA">Qatar</option>
+	<option value="RE">Réunion</option>
+	<option value="RO">Romania</option>
+	<option value="RU">Russian Federation</option>
+	<option value="RW">Rwanda</option>
+	<option value="BL">Saint Barthélemy</option>
+	<option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
+	<option value="KN">Saint Kitts and Nevis</option>
+	<option value="LC">Saint Lucia</option>
+	<option value="MF">Saint Martin (French part)</option>
+	<option value="PM">Saint Pierre and Miquelon</option>
+	<option value="VC">Saint Vincent and the Grenadines</option>
+	<option value="WS">Samoa</option>
+	<option value="SM">San Marino</option>
+	<option value="ST">Sao Tome and Principe</option>
+	<option value="SA">Saudi Arabia</option>
+	<option value="SN">Senegal</option>
+	<option value="RS">Serbia</option>
+	<option value="SC">Seychelles</option>
+	<option value="SL">Sierra Leone</option>
+	<option value="SG">Singapore</option>
+	<option value="SX">Sint Maarten (Dutch part)</option>
+	<option value="SK">Slovakia</option>
+	<option value="SI">Slovenia</option>
+	<option value="SB">Solomon Islands</option>
+	<option value="SO">Somalia</option>
+	<option value="ZA">South Africa</option>
+	<option value="GS">South Georgia and the South Sandwich Islands</option>
+	<option value="SS">South Sudan</option>
+	<option value="ES">Spain</option>
+	<option value="LK">Sri Lanka</option>
+	<option value="SD">Sudan</option>
+	<option value="SR">Suriname</option>
+	<option value="SJ">Svalbard and Jan Mayen</option>
+	<option value="SZ">Swaziland</option>
+	<option value="SE">Sweden</option>
+	<option value="CH">Switzerland</option>
+	<option value="SY">Syrian Arab Republic</option>
+	<option value="TW">Taiwan, Province of China</option>
+	<option value="TJ">Tajikistan</option>
+	<option value="TZ">Tanzania, United Republic of</option>
+	<option value="TH">Thailand</option>
+	<option value="TL">Timor-Leste</option>
+	<option value="TG">Togo</option>
+	<option value="TK">Tokelau</option>
+	<option value="TO">Tonga</option>
+	<option value="TT">Trinidad and Tobago</option>
+	<option value="TN">Tunisia</option>
+	<option value="TR">Turkey</option>
+	<option value="TM">Turkmenistan</option>
+	<option value="TC">Turks and Caicos Islands</option>
+	<option value="TV">Tuvalu</option>
+	<option value="UG">Uganda</option>
+	<option value="UA">Ukraine</option>
+	<option value="AE">United Arab Emirates</option>
+	<option value="GB">United Kingdom</option>
+	<option value="US">United States</option>
+	<option value="UM">United States Minor Outlying Islands</option>
+	<option value="UY">Uruguay</option>
+	<option value="UZ">Uzbekistan</option>
+	<option value="VU">Vanuatu</option>
+	<option value="VE">Venezuela, Bolivarian Republic of</option>
+	<option value="VN">Viet Nam</option>
+	<option value="VG">Virgin Islands, British</option>
+	<option value="VI">Virgin Islands, U.S.</option>
+	<option value="WF">Wallis and Futuna</option>
+	<option value="EH">Western Sahara</option>
+	<option value="YE">Yemen</option>
+	<option value="ZM">Zambia</option>
+	<option value="ZW">Zimbabwe</option>
+							</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td style="font-weight: bold;">Gender</td>
+							<td>
+							<select class="form-control" name="u_gender">
+								<option><?php echo $user_gender;?></option>
+								<option>Male</option>
+								<option>Female</option>
+								<option>Other</option>
+							</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td style="font-weight: bold;">Birthday</td>
+							<td>
+							<input type="date" name="u_birthday" class="form-control input-md" value="<?php echo $user_birthday;?>" required="required" >
+						</tr>
+						
+
+						<!-- recovery option start -->
+
+						<tr>
+							<td style="font-weight: bold;">Forgotten Password</td>
+							<td>
+							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Turn On</button>
+
+							<!-- Modal -->
+							<div id="myModal" class="modal fade" role="dialog">
+							  <div class="modal-dialog">
+
+							    <!-- Modal content-->
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal">&times;</button>
+							        <h4 class="modal-title">Modal Header</h4>
+							      </div>
+							      <div class="modal-body">
+							        <form action="recovery.php?id=<?php echo $user_id;?>" method="post" id="f">
+									<strong>What is your School Best Friend Name?</strong>
+									<textarea class="form-control" cols="83" rows="4" name="content" placeholder="Someone"></textarea><br/>
+									<input class="btn btn-default" type="submit" name="sub" value="Submit" style="width:100px;" /><br><br>
+									<pre >Answer the above question we will ask you this question if you forgot your <br>password.
+									</pre>
+									<br><br>
+									</form>
+									<?php
+									if(isset($_POST['sub'])){
+										$bfn = htmlentities($_POST['content']);
+
+										if($bfn==''){
+						
+										echo "<script>alert('Please Enter Something!')</script>";
+										echo "<script>window.open('edit_profile.php?u_id=$user_id','_self')</script>";
+										
+										exit();
+										
+										}
+										else {
+
+										$update = "update users set recovery_account='$bfn' where user_id='$user_id'";
+					
+										$run = mysqli_query($con,$update); 
+										
+										if($run){
+										
+										echo "<script>alert('Working...!')</script>";
+										echo "<script>window.open('edit_profile.php?u_id=$user_id','_self')</script>";
+										}else{
+										echo "<script>alert('Error while Updating information...!')</script>";
+										echo "<script>window.open('recovery.php','_self')</script>";
+										}
+										}
+									}
+									?>
+
+									<!-- recovery option ends -->
+
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							      </div>
+							    </div>
+
+							  </div>
+							</div>
+						</tr>
+						
+						<tr align="center">
+							<td colspan="6">
+							<input class="btn btn-info" style="width: 250px;" type="submit" name="update" value="Update"/>
+							</td>
+						</tr>
+					</table>
+				</form>
+	</div>
+	<div class="col-sm-2">
+	</div>
+</div>
+</body>
+</html>
+					
+<?php 
+	if(isset($_POST['update'])){
+	
+		$f_name = htmlentities($_POST['f_name']);
+		$l_name = htmlentities($_POST['l_name']);
+		$u_name = htmlentities($_POST['u_name']);
+		$describe_user = htmlentities($_POST['describe_user']);
+		$Relationship_status = htmlentities($_POST['Relationship']);
+		$u_pass = htmlentities($_POST['u_pass']);
+
+		$u_country = htmlentities($_POST['u_country']);
+		$u_gender = htmlentities($_POST['u_gender']);
+		$u_birthday = htmlentities($_POST['u_birthday']);
+		
+		
+		$update = "update users set f_name='$f_name', l_name='$l_name',user_name='$u_name',describe_user='$describe_user',Relationship='$Relationship_status', user_pass='$u_pass',user_country='$u_country',user_gender='$u_gender',user_birthday='$u_birthday' where user_id='$user_id'";
+
+		$u_name = "select * from users where user_name='$u_name'";
+	$run_name = mysqli_query($con,$u_name);
+
+	$check = mysqli_num_rows($run_name);
+
+	if($check==1){
+
+	echo "<script>alert('User name already exist, please try another!')</script>";
+		echo "<script>window.open('edit_profile.php','_self')</script>";
+		exit();
+}
+		
+		$run = mysqli_query($con,$update); 
+	
+		
+		if($run){
+		
+		echo "<script>alert('Your Profile Updated!')</script>";
+		echo "<script>window.open('home.php','_self')</script>";
+		}
+	
+	}
+
+
+?>
+<?php } ?>
+<?
+if ($_SESSION["user_email"] == "" && $_SESSION["user_email"] == null)
+	echo "<script>window.open('signin.php','_self')</script>";
+	
+	
+?>
+<script>
+function show_password() {
+    var x = document.getElementById("mypass");
+    if (x.type === "password") {
+        x.type = "text";
+    } else {
+        x.type = "password";
+    }
+}
+</script>
+
+Explanation : How all the user information is fetched from here
+
+Comments :
+
+
+
+<?php 
+		$user = $_SESSION['user_email'];
+		$get_user = "select * from users where user_email='$user'"; 
+		$run_user = mysqli_query($con,$get_user);
+		$row=mysqli_fetch_array($run_user);
+					
+		$user_id = $row['user_id']; 
+		$user_name = $row['user_name'];
+
+
+
+
+	$get_id = $_GET['post_id'];
+		
+	$get_com = "select * from comments where post_id='$get_id' ORDER by 1 DESC";
+	
+	$run_com = mysqli_query($con,$get_com);
+	
+	while($row=mysqli_fetch_array($run_com)){
+
+		$com_id =$row['com_id'];
+		$com = $row['comment']; 
+		$com_name = $row['comment_author']; 
+		$date = $row['date'];
+
+
+
+
+
+
+if($user_name == $com_name){
+		
+ 
+
+		echo "
+
+		<div class='row'>
+	
+        <div class='col-md-6 col-md-offset-3'>
+            <div class='panel panel-info'>
+                <div class='panel-body'>
+                	<div>
+
+					<h4><strong>$com_name</strong><i> commented</i> on $date</h4>
+
+
+
+
+
+
+    <p class='show-read-more' style='margin-left:5px;word-wrap:break-word; font-size:20px;margin: 0;
+            padding: 0;
+            border: 0;
+            font: inherit;
+            color: black;
+            white-space: pre-wrap;
+            vertical-align: baseline;'>$com</p>
+
+					</div> 
+                                        <a href='edit_post1.php?com_id=$com_id' style='float:right;'><button  class='btn btn-info'>Edit</button></a>
+					<a href='functions/delete_post1.php?com_id=$com_id' style='float:right;'><button class='btn btn-danger'>Delete</button></a>
+					
+                </div>
+            </div>
+        </div>
+        </div>
+		";
+
+	}else{
+
+
+		echo "
+
+		<div class='row'>
+        <div class='col-md-6 col-md-offset-3'>
+            <div class='panel panel-info'>
+                <div class='panel-body'>
+                	<div>
+					<h4><strong>$com_name</strong><i> commented</i> on $date</h4>
+					<p class='show-read-more' style='margin-left:5px;font-size:20px;    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    color: black;
+    vertical-align: baseline;'>$com</p>
+					</div>
+					
+
+                </div>
+            </div>
+        </div>
+		</div>
+	";
+	}
+
+	
+}
+
+	
+?>
+Explanation : Comments will be added by this code
+
+delete_post :
+lo<?php
+ini_set('session.gc_maxlifetime', 36000);
+$con = mysqli_connect("localhost","root","1","questionnere") or die("Connection was not established");
+
+if(isset($_GET['post_id'])){
+		
+		$post_id = $_GET['post_id']; 
+		
+		$delete_post = "delete from posts where post_id='$post_id'";
+		
+		$run_delete = mysqli_query($con,$delete_post);
+		
+		if($run_delete){
+		echo "<script>alert('A post has been deleted!')</script>";
+		echo "<script>window.open('../home.php','_self')</script>";
+		}
+		
+		
+		}
+
+?>
+
+Explanation post will be deleted
+
+functions :
+
+<?php
+
+
+$con = mysqli_connect("localhost","root","","questionnaire") or die("Connection was not established");
+
+
+		//function for inserting posts
+		function insertPost(){
+
+			if(isset($_POST['sub'])){
+			    
+			    		if ($_SESSION["user_email"] == "" && $_SESSION["user_email"] == null){
+			    		    echo "<script>window.open('signin.php','_self')</script>";
+			    		    
+			    		}
+			    	else{
+
+			global $con;
+			global $user_id;
+			$content = htmlentities($_POST['content'],ENT_QUOTES);
+			$upload_image = $_FILES['upload_image']['name'];
+            $image_tmp = $_FILES['upload_image']['tmp_name'];
+            $random_number = rand(1,100);
+
+            if(strlen($content) > 10000){
+            	echo "<script>alert('Please Use 10000 or less than 10000 words')</script>";
+            	echo"<script>window.open('home.php','_self')</script>";
+            }else{
+
+            if(strlen($upload_image) >= 1 && strlen($content) >= 1){
+            	move_uploaded_file($image_tmp,"imagepost/$upload_image.$random_number");
+
+	              $insert = "insert into posts (user_id,post_content,upload_image,post_date) values ('$user_id','$content','$upload_image.$random_number',NOW())";
+
+	              $run = mysqli_query($con,$insert);
+
+					if($run){
+					echo "<script>alert('Your Post Have Been Updated Successfully.')</script>";
+					
+					echo"<script>window.open('home.php','_self')</script>";
+
+					$update = "update users set posts='yes' where user_id='$user_id'";
+					$run_update = mysqli_query($con,$update);
+					}
+            
+					else {
+  echo "<script>alert('Error Occured')</script>";
+}
+
+
+			exit();
+            }else{
+
+            if($upload_image == '' && $content == ''){
+            	echo "<script>alert('Error Occured while uploading!')</script>";
+				echo"<script>window.open('home.php','_self')</script>";
+            }else{
+
+			if($content==''){
+
+	              move_uploaded_file($image_tmp,"imagepost/$upload_image.$random_number");
+
+	              $insert = "insert into posts (user_id,post_content,upload_image,post_date) values ('$user_id','No','$upload_image.$random_number',NOW())";
+
+	              $run = mysqli_query($con,$insert);
+
+					if($run){
+					echo "<script>alert('Your Post Have Been Updated Successfully.')</script>";
+					echo"<script>window.open('home.php','_self')</script>";
+
+					$update = "update users set posts='yes' where user_id='$user_id'";
+					$run_update = mysqli_query($con,$update);
+					}
+else {
+  echo "<script>alert('Error Occured')</script>";
+  
+}
+			exit();
+
+			}
+			else {
+
+			$insert = "insert into posts (user_id,post_content,post_date) values ('$user_id','$content',NOW())";
+
+			$run = mysqli_query($con,$insert);
+
+				if($run){
+				echo "<script>alert('Your Post Have Been Updated Successfully.')</script>";
+				echo"<script>window.open('home.php','_self')</script>";
+
+				$update = "update users set posts='yes' where user_id='$user_id'";
+				$run_update = mysqli_query($con,$update);
+				}
+				else {
+  echo "<script>alert('Error Occured')</script>";
+  echo"<script>window.open('home.php','_self')</script>";
+}
+			}
+		}
+	}
+	}
+}
+}
+	}
+
+	//function for displaying posts
+	function get_posts(){
+
+	global $con;
+
+	$per_page=2000000000000;
+
+	if (isset($_GET['page'])) {
+	$page = $_GET['page'];
+	}
+	else {
+	$page=1;
+	}
+	$start_from = ($page-1) * $per_page;
+
+	$get_posts = "select * from posts ORDER by 1 DESC LIMIT $start_from, $per_page";
+
+	$run_posts = mysqli_query($con,$get_posts);
+
+	while($row_posts=mysqli_fetch_array($run_posts)){
+
+		$post_id = $row_posts['post_id'];
+		$user_id = $row_posts['user_id'];
+		$content = substr($row_posts['post_content'],0,1000000);
+		$upload_image = $row_posts['upload_image'];
+		$post_date = $row_posts['post_date'];
+
+		//getting the user who has posted the thread
+		$user = "select * from users where user_id='$user_id' AND posts='yes'";
+		$run_user = mysqli_query($con,$user);
+		$row_user=mysqli_fetch_array($run_user);
+
+		$user_name = $row_user['user_name'];
+		$user_image = $row_user['user_image'];
+
+		//now displaying all at once
+		if($content=="No" && strlen($upload_image) >= 1){
+
+			echo "
+			<div class='row'>
+				<div class='col-sm-3'>
+				</div>
+				<div id='posts' class='col-sm-6'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;
+						font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    color: var(--newCommunityTheme-bodyText);
+    display: inline;
+    line-height: 20px;
+    text-decoration: none;
+    vertical-align: baseline;cursor: pointer;
+						color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div>
+				<br>
+		
+				
+		<a href='#'  data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false' > 
+<img src='https://img.icons8.com/ios/50/000000/forward-arrow.png'/ width='20px' height='20px'>
+</a>
+<ul class='dropdown-menu'>
+<li>
+    <a href='https://twitter.com/share?url=https://retort.in/single.php?post_id=$post_id' target='_blank'>
+       <img src='https://img.icons8.com/fluent/48/000000/twitter.png'/ width='20px' height='20px'>Twitter
+    </a>
+</li>
+<li>
+   <a href='http://www.facebook.com/sharer/sharer.php?u=https://retort.in/single.php?post_id=$post_id'>
+        <img src='https://img.icons8.com/fluent/48/000000/facebook-new.png'/ width='20px' height='20px'>&nbsp;Facebook
+    </a>
+ 
+</li>
+
+
+	  </ul>
+	      
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+			
+				</div>
+				<div class='col-sm-3'>
+				</div>
+			</div><br><br>
+			";
+
+		}
+		else if(strlen($content) >= 1 && strlen($upload_image) >= 1){
+
+			echo "
+			<div class='row'>
+				<div class='col-sm-3'>
+				</div>
+				<div id='posts' class='col-sm-6'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none; font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    color: var(--newCommunityTheme-bodyText);
+    display: inline;
+    line-height: 20px;
+    text-decoration: none;
+    vertical-align: baseline;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+					
+						<p class='show-read-more'>$content</p>
+						
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div><br>
+						<a href='#'  data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false' > 
+<img src='https://img.icons8.com/ios/50/000000/forward-arrow.png'/ width='20px' height='20px'>
+</a>
+<ul class='dropdown-menu'>
+<li>
+    <a href='https://twitter.com/share?url=https://retort.in/single.php?post_id=$post_id' target='_blank'>
+       <img src='https://img.icons8.com/fluent/48/000000/twitter.png'/ width='20px' height='20px'>Twitter
+    </a>
+</li>
+<li>
+   <a href='http://www.facebook.com/sharer/sharer.php?u=https://retort.in/single.php?post_id=$post_id'>
+        <img src='https://img.icons8.com/fluent/48/000000/facebook-new.png'/ width='20px' height='20px'>&nbsp;Facebook
+    </a>
+</li>
+
+
+	  </ul>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+				</div>
+				<div class='col-sm-3'>
+				</div>
+			</div><br><br>
+			";
+
+		}
+		else{
+
+		echo "
+
+		<div class='row'>
+			<div class='col-sm-3'>
+			</div>
+			<div id='posts' class='col-sm-6'>
+			<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;
+						font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    color: var(--newCommunityTheme-bodyText);
+    display: inline;
+    line-height: 20px;
+    text-decoration: none;
+    vertical-align: baseline;cursor: pointer;
+    color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-2'>
+					</div>
+					<div class='col-sm-6'>
+			
+						<h3><p class='show-read-more'>$content</p></h3>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+						<a href='#'  data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false' > 
+<img src='https://img.icons8.com/ios/50/000000/forward-arrow.png'/ width='20px' height='20px'>
+</a>
+<ul class='dropdown-menu'>
+<li>
+    <a href='https://twitter.com/share?url=https://retort.in/single.php?post_id=$post_id' target='_blank'>
+       <img src='https://img.icons8.com/fluent/48/000000/twitter.png'/ width='20px' height='20px'>Twitter
+    </a>
+</li>
+<li>
+   <a href='http://www.facebook.com/sharer/sharer.php?u=https://retort.in/single.php?post_id=$post_id'>
+        <img src='https://img.icons8.com/fluent/48/000000/facebook-new.png'/ width='20px' height='20px'>&nbsp;Facebook
+    </a>
+ 
+</li>
+
+
+	  </ul>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+			</div>
+			<div class='col-sm-3'>
+			</div>
+		</div><br><br>
+
+		";
+	}
+
+	}
+	include("pagination.php");
+	}
+
+	function single_post(){
+
+	if(isset($_GET['post_id'])){
+
+	global $con;
+
+	$get_id = $_GET['post_id'];
+
+	$get_posts = "select * from posts where post_id='$get_id'";
+
+	$run_posts = mysqli_query($con,$get_posts);
+
+	$row_posts=mysqli_fetch_array($run_posts);
+
+		$post_id = $row_posts['post_id'];
+		$user_id = $row_posts['user_id'];
+		$content = $row_posts['post_content'];
+		$upload_image = $row_posts['upload_image'];
+		$post_date = $row_posts['post_date'];
+
+		//getting the user who has posted the thread
+		$user = "select * from users where user_id='$user_id' AND posts='yes'";
+
+		$run_user = mysqli_query($con,$user);
+		$row_user=mysqli_fetch_array($run_user);
+
+		$user_name = $row_user['user_name'];
+		$user_image = $row_user['user_image'];
+
+		// getting the user session
+		$user_com = $_SESSION['user_email'];
+
+		$get_com = "select * from users where user_email='$user_com'";
+		$run_com = mysqli_query($con,$get_com);
+		$row_com=mysqli_fetch_array($run_com);
+
+		$user_com_id = $row_com['user_id'];
+		$user_com_name = $row_com['user_name'];
+
+
+		//now displaying all at once
+
+
+
+		if(isset($_GET['post_id'])){
+			$post_id = $_GET['post_id'];
+			}
+			$get_posts = "select post_id from users where post_id='$post_id'";
+			$run_user = mysqli_query($con,$get_posts);
+
+			$post_id = $_GET['post_id'];
+
+			$post = $_GET['post_id'];
+			$get_user = "select * from posts where post_id='$post'";
+			$run_user = mysqli_query($con,$get_user);
+			$row=mysqli_fetch_array($run_user);
+
+			$p_id = $row['post_id'];
+
+			if($p_id != $post_id){
+				echo "<script>alert('ERROR')</script>";
+				echo "<script>window.open('home.php','_self')</script>";
+			}else{
+
+
+		if($content=="No" && strlen($upload_image) >= 1){
+
+			echo "
+			<div class='row'>
+				<div class='col-sm-3'>
+				</div>
+				<div id='posts' class='col-sm-6'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px' alt=''></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;border: 15px; cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div><br>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+				</div>
+				<div class='col-sm-3'>
+				</div>
+			</div><br><br>
+			";
+
+		}
+		else if(strlen($content) >= 1 && strlen($upload_image) >= 1){
+
+			echo "
+			<div class='row'>
+				<div class='col-sm-3'>
+				</div>
+				<div id='posts' class='col-sm-6'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px' alt=''></p>
+					</div>
+					<div class='col-sm-6'>
+					
+						<h3><a style='text-decoration: none;border: 15px; cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+					<title> $content - Retort.in</title>
+						<p class='show-read-more'>$content</p>
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div><br>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+				</div>
+				<div class='col-sm-3'>
+				</div>
+			</div><br><br>
+			";
+
+		}
+		else{
+
+		echo "
+
+		<div class='row'>
+			<div class='col-sm-3'>
+			</div>
+			<div id='posts' class='col-sm-6'>
+			<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px' alt=''></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-2'>
+					</div>
+					<div class='col-sm-6'>
+					<title>$content - Retort.in </title>
+						<h3><p class='show-read-more'>$content</p></h3>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+			</div>
+			<div class='col-sm-3'>
+			</div>
+		</div><br><br>
+
+		";
+	}
+		include("comments.php");
+
+		echo "
+		<div class='row'>
+        <div class='col-md-6 col-md-offset-3'>
+            <div class='panel panel-info'>
+                <div class='panel-body'>
+                	<form action='' method='post' class='form-inline'>
+                    <textarea placeholder='Write your comment here!'' class='pb-cmnt-textarea' name='comment'></textarea>
+                    <button class='btn btn-info pull-right' name='reply'>Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+		";
+
+		if(isset($_POST['reply'])){
+		    
+		    			    		if ($_SESSION["user_email"] == "" && $_SESSION["user_email"] == null){
+			    		    echo "<script>window.open('signin.php','_self')</script>";
+			    		    
+			    		}else{
+
+			$comment = htmlentities($_POST['comment'],ENT_QUOTES);
+
+			if($comment == ""){
+			echo"<script>alert('Enter your comment!')</script>";
+			echo "<script>window.open('single.php?post_id=$post_id','_self')</script>";
+			}else{
+			$insert = "insert into comments (post_id,user_id,comment,comment_author,date) values ('$post_id','$user_id','$comment','$user_com_name',NOW())";
+
+
+			
+			if (mysqli_query($con, $insert)) {
+  echo "<script>alert('Your Reply was added!')</script>";
+  echo "<script>window.open('single.php?post_id=$post_id','_self')</script>";
+} else {
+  echo "<script>alert('Error Occured')</script>";
+}
+		}
+
+		}
+
+	}
+	}
+
+	}
+
+}
+
+	//function for displaying user posts
+	function user_posts(){
+
+
+	global $con;
+
+			if(isset($_GET['u_id'])){
+			$u_id = $_GET['u_id'];
+			}
+			$get_posts = "select * from posts where user_id='$u_id' ORDER by 1 DESC ";
+
+			$run_posts = mysqli_query($con,$get_posts);
+
+			while($row_posts=mysqli_fetch_array($run_posts)){
+
+			$post_id = $row_posts['post_id'];
+			$user_id = $row_posts['user_id'];
+			$content = $row_posts['post_content'];
+			$upload_image = $row_posts['upload_image'];
+			$post_date = $row_posts['post_date'];
+
+			//getting the user who has posted the thread
+
+			$user = "select * from users where user_id='$user_id' AND posts='yes'";
+
+			$run_user = mysqli_query($con,$user);
+			$row_user=mysqli_fetch_array($run_user);
+
+			$user_name = $row_user['user_name'];
+			$user_image = $row_user['user_image'];
+
+
+
+
+
+
+			if(isset($_GET['u_id'])){
+			$u_id = $_GET['u_id'];
+			}
+			$get_posts = "select user_email from users where user_id='$u_id'";
+			$run_user = mysqli_query($con,$get_posts);
+			$row=mysqli_fetch_array($run_user);
+
+			$user_email = $row['user_email'];
+
+			$user = $_SESSION['user_email'];
+			$get_user = "select * from users where user_email='$user'";
+			$run_user = mysqli_query($con,$get_user);
+			$row=mysqli_fetch_array($run_user);
+
+			$user_id = $row['user_id'];
+			$u_email = $row['user_email'];
+
+			if($u_email != $user_email){
+				echo"<script>window.open('my_post.php?u_id=$user_id','_self')</script>";
+			}else{
+			    
+
+
+
+
+
+
+			//now displaying all at once
+
+			if($content=="No" && strlen($upload_image) >= 1){
+
+			echo "
+			<div class='row'>
+				<div class='col-sm-3'>
+				</div>
+				<div id='posts' class='col-sm-6'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div><br>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+				</div>
+				<div class='col-sm-3'>
+				</div>
+			</div><br><br>
+			";
+
+		}
+		else if(strlen($content) >= 1 && strlen($upload_image) >= 1){
+
+			echo "
+			<div class='row'>
+				<div class='col-sm-3'>
+				</div>
+				<div id='posts' class='col-sm-6'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<p class='show-read-more'>$content</p>
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div><br>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+				</div>
+				<div class='col-sm-3'>
+				</div>
+			</div><br><br>
+			";
+
+		}
+		else{
+
+		echo "
+
+		<div class='row'>
+			<div class='col-sm-3'>
+			</div>
+			<div id='posts' class='col-sm-6'>
+			<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-2'>
+					</div>
+					<div class='col-sm-6'>
+						<h3><p class='show-read-more'>$content</p></h3>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+			</div>
+			<div class='col-sm-3'>
+			</div>
+		</div><br><br>
+
+		";
+	}
+			include("functions/delete_post.php");
+		}
+
+		}
+
+
+
+
+
+
+	}
+
+	//function for displaying search results
+	function results(){
+
+	global $con;
+
+	if(isset($_GET['search'])){
+	$search_query = htmlentities($_GET['user_query']);
+	}
+	$get_posts = "select * from posts where post_content like '%$search_query%' OR upload_image like '%$search_query%'";
+
+	$run_posts = mysqli_query($con,$get_posts);
+
+	while($row_posts=mysqli_fetch_array($run_posts)){
+
+		$post_id = $row_posts['post_id'];
+		$user_id = $row_posts['user_id'];
+		$content = $row_posts['post_content'];
+		$upload_image = $row_posts['upload_image'];
+		$post_date = $row_posts['post_date'];
+
+		//getting the user who has posted the thread
+
+		$user = "select * from users where user_id='$user_id' AND posts='yes'";
+
+		$run_user = mysqli_query($con,$user);
+		$row_user=mysqli_fetch_array($run_user);
+
+		$user_name = $row_user['user_name'];
+		$first_name = $row_user['f_name'];
+		$last_name = $row_user['l_name'];
+		$user_image = $row_user['user_image'];
+
+		//now displaying all at once
+		if($content=="No" && strlen($upload_image) >= 1){
+
+			echo "
+			<div class='row'>
+				<div class='col-sm-3'>
+				</div>
+				<div id='posts' class='col-sm-6'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div><br>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+				</div>
+				<div class='col-sm-3'>
+				</div>
+			</div><br><br>
+			";
+
+		}
+		else if(strlen($content) >= 1 && strlen($upload_image) >= 1){
+
+			echo "
+			<div class='row'>
+				<div class='col-sm-3'>
+				</div>
+				<div id='posts' class='col-sm-6'>
+				<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-12'>
+						<p class='show-read-more'>$content</p>
+						<img id='posts-img' src='imagepost/$upload_image' style='height:350px;'>
+					</div>
+				</div><br>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+				</div>
+				<div class='col-sm-3'>
+				</div>
+			</div><br><br>
+			";
+
+		}
+		else{
+
+		echo "
+
+		<div class='row'>
+			<div class='col-sm-3'>
+			</div>
+			<div id='posts' class='col-sm-6'>
+			<div class='row'>
+					<div class='col-sm-2'>
+						<p><img src='users/$user_image' class='img-circle' width='40px' height='40px'></p>
+					</div>
+					<div class='col-sm-6'>
+						<h3><a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
+						<h4><small style='color:black;'>Updated a post on <strong>$post_date</strong></small></h4>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-sm-2'>
+					</div>
+					<div class='col-sm-6'>
+						<h3><p class='show-read-more'>$content</p></h3>
+					</div>
+					<div class='col-sm-4'>
+
+					</div>
+				</div>
+				<a href='single.php?post_id=$post_id' style='float:right;'><button class='btn btn-info'>&#128172;</button></a><br>
+			</div>
+			<div class='col-sm-3'>
+			</div>
+		</div><br><br>
+
+		";
+	}
+
+	}
+	}
+
+
+	//function for displaying search results
+	function search_user(){
+
+	global $con;
+
+	if(isset($_GET['search_user_btn'])){
+	$search_query = htmlentities($_GET['search_user']);
+	$get_user = "select * from users where f_name like '%$search_query%' OR l_name like '%$search_query%' OR user_name like '%$search_query%'";
+	}
+	else{
+	$get_user = "select * from users";
+	}
+
+	$run_user = mysqli_query($con,$get_user);
+
+	while($row_user=mysqli_fetch_array($run_user)){
+
+		$user_id = $row_user['user_id'];
+		$f_name = $row_user['f_name'];
+		$l_name = $row_user['l_name'];
+		$username = $row_user['user_name'];
+		$user_image = $row_user['user_image'];
+
+		//now displaying all at once
+
+		echo "
+		<div class='row'>
+			<div class='col-sm-3'>
+			</div>
+
+			<div class='col-sm-6'>
+
+			<div class='row' id='find_people'>
+			<div class='col-sm-4'>
+			<a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>
+			<img class='img-circle' src='users/$user_image' width='40px' height='40px' title='$username' style='float:left; margin:1px;'/>
+			</a>
+			</div><br><br>
+			<div class='col-sm-6'>
+			<a style='text-decoration: none;cursor: pointer;color: #3897f0;' href='user_profile.php?u_id=$user_id'>
+			<strong><h2>$username</h2></strong>
+			</a>
+			</div>
+			<div class='col-sm-3'>
+			</div>
+
+			</div>
+
+			</div>
+			<div class='col-sm-4'>
+			</div>
+		</div><br>
+		";
+
+	}
+
+	}
+
+
+
+?>
+Explanation : Functions will be implemented here
+
+pagination :
+<style>
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+}
+.pagination a:hover:not(.active) {background-color: #ddd;}
+</style>
+	<?php 
+	
+	$query = "select * from posts";
+	
+	$result = mysqli_query($con, $query);
+	
+	// Count the total records
+	$total_posts = mysqli_num_rows($result);
+	
+	//Using ceil function to divide the total records on per page
+	$total_pages = ceil($total_posts / $per_page);
+	
+	//Going to first page
+	echo "
+	<center>
+	<div class='pagination'>
+	<a href='home.php?page=1'></a>
+	";
+	
+	for ($i=1; $i<=$total_pages; $i++) {
+	echo "<a href='home.php?page=$i'></a>";
+	}
+	// Going to last page
+	echo "<a href='home.php?page=$total_pages'></a></center></div>";
+	
+	?>
+	
+Explanation : Pagination can be achieved here
+
